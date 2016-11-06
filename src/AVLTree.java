@@ -64,11 +64,9 @@ public class AVLTree<T extends Comparable<T>> {
         if (node == null)
             return new Node<>(data);
         if (node.getData().compareTo(data) > 0) {
-            node = new Node<>(node.getData(), insert(node.getLeft(), data),
-                    node.getRight());
+            node = new Node<>(node.getData(), insert(node.getLeft(), data), node.getRight());
         } else if (node.getData().compareTo(data) < 0) {
-            node = new Node<>(node.getData(), node.getLeft(), insert(
-                    node.getRight(), data));
+            node = new Node<>(node.getData(), node.getLeft(), insert(node.getRight(), data));
         }
 
         switch (balanceNumber(node)) {
@@ -168,19 +166,22 @@ public class AVLTree<T extends Comparable<T>> {
      * @return - return boolean
      */
     public boolean isAVL(Node<T> node) {
-        if (node == null || (node.getRight() == null && node.getLeft() == null))
+        if (node == null)
             return true;
         else if (node.getRight() == null && node.getLeft() != null)
             return node.getData().compareTo(node.getLeft().getData()) > 0
-                    && isAVL(node.getLeft());
+                    && isAVL(node.getLeft())
+                    && balanceNumber(node) == 0;
         else if (node.getRight() != null && node.getLeft() == null)
-            return node.getData().compareTo(node.getRight().getData()) > 0
-                    && isAVL(node.getRight());
+            return node.getData().compareTo(node.getRight().getData()) < 0
+                    && isAVL(node.getRight())
+                    && balanceNumber(node) == 0;
         else if (node.getRight() != null && node.getLeft() != null)
             return node.getData().compareTo(node.getLeft().getData()) > 0
                     && isAVL(node.getLeft())
                     && node.getData().compareTo(node.getRight().getData()) < 0
-                    && isAVL(node.getRight());
+                    && isAVL(node.getRight())
+                    && balanceNumber(node) == 0;
         return true;
     }
 
